@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="description" content="">
+
+    <meta name="author" content="">
+
+    <title>Azico</title>
+
+    <!-- Mobile Specific Meta-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  </head>
+
+  <body id="body">
+
+    <section class="signin-page account">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3">
+            <div class="block text-center">
+              <a class="logo" href="index.html">
+                <img src="{% static '' %}images/logo.png" alt="">
+              </a>
+              <h2 class="text-center">Welcome Back</h2>
+              <p class="mt-20"><a href="{% url 'dashboard:sign_in' %}"> Sign in</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

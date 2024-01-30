@@ -1,0 +1,159 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+	<!--begin::Head-->
+	<head><base href="../../../">
+		<title></title>
+		<meta charset="utf-8" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta property="og:locale" content="en_US" />
+		<meta property="og:type" content="article" />
+		<meta property="og:title" content="" />
+		<meta property="og:url" content="" />
+		<meta property="og:site_name" content="" />
+		<link rel="canonical" href="" />
+		<link rel="shortcut icon" href="{% static 'dashboard/assets/media/logos/favicon.ico' %}" />
+		<!--begin::Fonts-->
+		<!--end::Fonts-->
+		<!--begin::Global Stylesheets Bundle(used by all pages)-->
+		<link href="{% static 'dashboard/assets/plugins/global/plugins.bundle.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'dashboard/assets/css/style.bundle.css' %}" rel="stylesheet" type="text/css" />
+		<!--end::Global Stylesheets Bundle-->
+	</head>
+	<!--end::Head-->
+	<!--begin::Body-->
+	<body data-kt-name="metronic" id="kt_body" class="app-blank app-blank bgi-size-cover bgi-position-center bgi-no-repeat">
+		<!--begin::Theme mode setup on page load-->
+		<script>if ( document.documentElement ) { const defaultThemeMode = "system"; const name = document.body.getAttribute("data-kt-name"); let themeMode = localStorage.getItem("kt_" + ( name !== null ? name + "_" : "" ) + "theme_mode_value"); if ( themeMode === null ) { if ( defaultThemeMode === "system" ) { themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; } else { themeMode = defaultThemeMode; } } document.documentElement.setAttribute("data-theme", themeMode); }</script>
+		<!--end::Theme mode setup on page load-->
+		<!--begin::Root-->
+		<div class="d-flex flex-column flex-root" id="kt_app_root">
+			<!--begin::Page bg image-->
+			<style>body { background-image: url('{% static "dashboard/assets/media/auth/bg4.jpg" %}'); } [data-theme="dark"] body { background-image: url('{% static "dashboard/assets/media/auth/bg4-dark.jpg" %}'); }</style>
+			<!--end::Page bg image-->
+			<!--begin::Authentication - Sign-in -->
+			<div class="d-flex flex-column flex-lg-row flex-column-fluid">
+				
+				<!--begin::Body-->
+				<div class="d-flex flex-column-fluid justify-content-center justify-content-lg-center p-12">
+					<!--begin::Wrapper-->
+					<div class="bg-body d-flex flex-center rounded-4 w-md-600px p-10">
+						<!--begin::Content-->
+						<div class="w-md-400px">
+							<!--begin::Form-->
+							<form class="form w-100" method="post"  action="">
+								{% csrf_token %}
+								<div class="text-center mb-11">
+									<!--begin::Title-->
+									<h1 class="text-dark fw-bolder mb-3">Sign In</h1>
+									<!--end::Title-->
+								</div>
+								
+								<!--begin::Input group=-->
+								<div class="fv-row mb-8">
+									<!--begin::Phone-->
+									<input type="text" minlength="8" maxlength="8" placeholder="6xxxxxxx" name="username" class="form-control bg-transparent" pattern="[6][1-5][0-9]{6}"/>
+									<small id="usernameHelpBlock" class="form-text text-muted ms-5">61xxxxxx-65xxxxxx</small>
+									<!--end::Phone-->
+								</div>
+								<!--end::Input group=-->
+								<div class="fv-row mb-3">
+									<!--begin::Password-->
+									<div class="position-relative mb-3">
+										<input id="password" class="form-control bg-transparent" type="password" placeholder="Password" name="password" autocomplete="off" />
+										<span class="btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2" data-kt-password-meter-control="visibility">
+											<i class="bi bi-eye-slash fs-2"></i>
+											<i class="bi bi-eye fs-2 d-none"></i>
+										</span>
+									</div>
+									<!--end::Password-->
+								</div>
+								<!--end::Input group=-->
+								<!--begin::Wrapper-->
+								<div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
+									
+								</div>
+								<!--end::Wrapper-->
+								<!--begin::Submit button-->
+								<div class="d-grid mb-10">
+									<button type="submit" class="btn btn-primary me-2 flex-shrink-0">
+											<!--begin::Indicator label-->
+											<span class="indicator-label" data-kt-translate="sign-in-submit">Sign In</span>
+											<!--end::Indicator label-->
+											<!--begin::Indicator progress-->
+											<span class="indicator-progress">
+												<span data-kt-translate="general-progress">Please wait...</span>
+												<span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+											</span>
+											<!--end::Indicator progress-->
+										</button>
+								</div>
+								<!--end::Submit button-->
+								
+							</form>
+							<!--end::Form-->
+						</div>
+						<!--end::Content-->
+					</div>
+					<!--end::Wrapper-->
+				</div>
+				<!--end::Body-->
+			</div>
+			<!--end::Authentication - Sign-in-->
+		</div>
+		
+		<script src="{% static 'dashboard/assets/plugins/global/plugins.bundle.js' %}"></script>
+		<script src="{% static 'dashboard/assets/js/scripts.bundle.js' %}"></script>
+		<script>
+			function setInputFilter(textbox, inputFilter, errMsg) {
+				["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop", "focusout"].forEach(function(event) {
+				  textbox.addEventListener(event, function(e) {
+					if (inputFilter(this.value)) {
+					  // Accepted value
+					  if (["keydown","mousedown","focusout"].indexOf(e.type) >= 0){
+						this.classList.remove("input-error");
+						this.setCustomValidity("");
+					  }
+					  this.oldValue = this.value;
+					  this.oldSelectionStart = this.selectionStart;
+					  this.oldSelectionEnd = this.selectionEnd;
+					} else if (this.hasOwnProperty("oldValue")) {
+					  // Rejected value - restore the previous one
+					  this.classList.add("input-error");
+					  this.setCustomValidity(errMsg);
+					  this.reportValidity();
+					  this.value = this.oldValue;
+					  this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+					} else {
+					  // Rejected value - nothing to restore
+					  this.value = "";
+					}
+				  });
+				});
+			  }
+			  setInputFilter(document.querySelector('input[name="username"]'), function(value) {
+				return /^\d*$/.test(value); }, "61xxxxxx - 65xxxxxx bolmaly");
+				var pass_vis = document.querySelector('[data-kt-password-meter-control="visibility"]');
+				var pass_inp = document.getElementById("password");
+				var eye_vis = $(".bi-eye")[0];
+				var eye_not_vis = $(".bi-eye-slash")[0];
+				
+				pass_vis.addEventListener("click", function(){
+					if(pass_inp.getAttribute("type") == 'password'){
+						pass_inp.setAttribute("type","text");
+						$(eye_vis).removeClass("d-none");
+						$(eye_not_vis).addClass("d-none");
+					}
+					else
+					{
+						pass_inp.setAttribute("type","password");
+						$(eye_vis).addClass("d-none");
+						$(eye_not_vis).removeClass("d-none");
+					}
+					
+				});
+		</script>
+	</body>
+</html>

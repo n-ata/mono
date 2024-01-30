@@ -1,0 +1,480 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% load utils%}
+{% block title %}{{ title }}{% endblock title %}
+{% block content %}
+<link href="{% static 'dashboard/assets/plugins/custom/cropper/cropper.bundle.css' %}" rel="stylesheet" type="text/css" />
+	<div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+		<!--begin::Content wrapper-->
+		<div class="d-flex flex-column flex-column-fluid">
+			<!--begin::Toolbar-->
+			<div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+				<!--begin::Toolbar container-->
+				<div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack">
+					<!--begin::Page title-->
+					<div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+						<!--begin::Title-->
+						<h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Create Song</h1>
+						<!--end::Title-->
+						<!--begin::Breadcrumb-->
+						<ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+							<!--begin::Item-->
+							<li class="breadcrumb-item text-muted">
+								<a href="{% url 'dashboard:home' %}" class="text-muted text-hover-primary">Home</a>
+							</li>
+							<!--end::Item-->
+							<!--begin::Item-->
+							<li class="breadcrumb-item">
+								<span class="bullet bg-gray-400 w-5px h-2px"></span>
+							</li>
+							<!--end::Item-->
+							<!--begin::Item-->
+							<li class="breadcrumb-item text-muted">create-song</li>
+							<!--end::Item-->
+						</ul>
+						<!--end::Breadcrumb-->
+					</div>
+					<!--end::Page title-->
+				</div>
+				<!--end::Toolbar container-->
+			</div>
+			<!--end::Toolbar-->
+			<!--begin::Content-->
+			<div id="kt_app_content" class="app-content flex-column-fluid">
+				<!--begin::Content container-->
+				<div id="kt_app_content_container" class="app-container container-xxl">
+					<!--begin::Card-->
+					<div class="card">
+						<!--begin::Card body-->
+						<div class="card-body py-4">
+							<form class="form" action="{% url 'dashboard:create-song' artist_id=artist_id song_id=song_id%}" id="song-detail-form">
+								<!--begin::Step 1-->
+								{% csrf_token %}
+								<div class="d-flex flex-column me-n7 pe-7">
+									<div class="row mb-7">
+										<div class="col-6">
+											<div class="position-relative mb-3">
+												<label class="form-label fs-6 fw-semibold">Name:</label>
+												<input type="text" name="name" class="form-control" placeholder="Name" {% if song %} value="{{song.name}}" {% endif %}/>
+											</div>
+										</div>
+										<div class="col-6">
+											<div class="position-relative mb-3">
+												<label class="form-label fs-6 fw-semibold">Artists: </label>
+												<select name="artists" required class="form-select  fw-bold" data-kt-select2="true" data-placeholder="Select Artists" data-allow-clear="true"  id="song_artists" multiple="multiple">
+													{% if song %}
+													{% for art in artists %}
+														<option value="{{art.artist.id}}" selected>{{art.artist.name}}</option>
+													{% endfor %}
+													{% else %}
+													<option value="{{artists.id}}" selected>{{artists.name}}</option>
+													{% endif %}
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="row mb-7">
+										<div class="col-6">
+											<div class="position-relative mb-3">
+												<label class="form-label fs-6 fw-semibold">Genres:</label>
+												<select name="genres" required class="form-select  fw-bold" data-close-on-select="false" data-kt-select2="true" data-placeholder="Select Genre" data-allow-clear="true" multiple="multiple">
+													{% for genre in genres %}
+													{% if genre.id in song_genres %}
+														<option value="{{genre.id}}" selected>{{genre.name}}</option>
+													{%else%}
+													<option value="{{genre.id}}">{{genre.name}}</option>
+													{% endif %}
+													{% endfor %}
+												</select>
+											</div>
+										</div>
+										<div class="col-6">
+											<div class="position-relative mb-3 fv-row">
+												<div class="flex-row-fluid">
+													<label class="form-label required fs-6 fw-semibold">Audio: </label>
+													<a href="{% if song.audio %}{{song.audio.url}}{% endif %}" class="form-label text-success fs-6 fw-semibold">{% if song.audio %}{{song.audio}}{% endif %}</a>
+												</div>
+												<input class="form-control" type="file" name="audio" accept="audio/*" />
+											</div>
+										</div>
+									</div>
+									<div class="row mb-7">
+										<div class="col-6">
+											<div class="position-relative mb-3">
+												<label class="form-label fs-6 fw-semibold">Album:</label>
+												<select name="album" class="form-select  fw-bold"  data-kt-select2="true" data-placeholder="Select Album" data-allow-clear="true" data-hide-search="true">
+													<option></option>
+													{% for alb in albums %}
+														{% if song.album %}
+															<option value="{{alb.album_id}}" selected>{{alb.album.name}}</option>
+														{% else %}
+															<option value="{{alb.album_id}}">{{alb.album.name}}</option>
+														{% endif %}
+													
+													{% endfor %}
+												</select>
+											</div>
+										</div>
+										<div class="col-6">
+											<div class="position-relative mb-3 fv-row">
+												<label class="form-label required fs-6 fw-semibold">Year: </label>
+												<input class="form-control" type="number" name="year" {% if song %} {% if song.album %} value="{{song.album.year}}" {% else %}value="{{song.year}}"{% endif %} {% endif %}/>
+											</div>
+										</div>
+									</div>
+									<div class="row mb-7">
+										<div class="col-6">
+											<label class="fw-semibold fs-6 mb-2">Order:</label>
+											<input type="number" name="order" class="form-control" placeholder="Order" {% if song %}value="{{song.order}}"{% endif %}/>
+										</div>
+										<div class="col-6">
+											<label class="fw-semibold fs-6 mb-2">Listened count:</label>
+											<input type="number" name="listened_count" class="form-control" placeholder="Listened Count" {% if song %}value="{{song.listened_count}}"{% endif %}/>
+										</div>
+									</div>
+									<div class="row mb-7">
+										<div class="col-6">
+											<label class="fw-semibold fs-6 mb-2">Hit?</label>
+											<div class="form-check form-switch form-check-custom form-check-solid">
+												<input class="form-check-input" type="checkbox" name="hit" id="is_hit" {% if song %}{% if song.hit%}checked{%endif%}{% endif %}/>
+												<label class="form-check-label" for="is_hit">
+													Is Hit?
+												</label>
+											</div>
+										</div>
+										<div class="col-6">
+											<label class="fw-semibold fs-6 mb-2">Top?</label>
+											<div class="form-check form-switch form-check-custom form-check-solid">
+												<input class="form-check-input" type="checkbox" name="top" id="is_top" {% if song %}{% if song.top%}checked{%endif%}{% endif %}/>
+												<label class="form-check-label" for="is_top">
+													Is Top?
+												</label>
+											</div>
+										</div>
+									</div>
+									<div class="row mb-7 w-100">
+										<label class="form-label fs-6 fw-semibold">Image:</label>
+										<div class="col-4">
+											<input type="file" class="form-control" id="banner_image_input"/>
+										</div>
+										<div class="col-8" style="max-height:300px !important;">
+											<input class="form-check-input d-none" type="checkbox" name="is_image_edited" id="is_image_edited"/>
+											<img id="banner_image" {% if song %} {%if song.image %} src="{{song.image.url}}" {% endif %}{% endif %}>
+										</div>
+										
+									</div>
+								</div>
+								<div class="d-flex justify-content-between pt-15">
+									<a href="{% url 'dashboard:artist-details' artist_id %}" class="btn btn-info" >
+										<span class="indicator-label">Back</span>
+									</a>
+									<button type="submit" class="btn btn-primary" >
+										<span class="indicator-label">Save</span>
+										<span class="indicator-progress">Please wait...
+										<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+									</button>
+									<button type="reset" class="btn btn-secondary d-none" id="reset-form">Cancel</button>
+								</div>
+								
+								<!--begin::Repeater-->
+								
+								<!--end::Repeater-->
+							</form>
+
+							
+						</div>
+						<!--end::Card body-->
+					</div>
+					<!--end::Card-->
+				</div>
+				<!--end::Content container-->
+			</div>
+			<!--end::Content-->
+		</div>
+		<!--end::Content wrapper-->
+		<!--begin::Footer-->
+		<div id="kt_app_footer" class="app-footer">
+			<!--begin::Footer container-->
+			<div class="app-container container-fluid d-flex flex-column flex-md-row flex-center flex-md-stack py-3">
+				<!--begin::Copyright-->
+				<div class="text-dark order-2 order-md-1">
+					<span class="text-muted fw-semibold me-1">2024©</span>
+					<a href="https://mono.com.tm" target="_blank" class="text-gray-800 text-hover-primary">mono</a>
+				</div>
+				<!--end::Copyright-->
+			</div>
+			<!--end::Footer container-->
+		</div>
+		<!--end::Footer-->
+	</div>
+	<!--CKEditor Build Bundles:: Only include the relevant bundles accordingly-->
+	
+{% endblock content %}
+
+
+{% block script %}
+	<script src="{% static 'dashboard/assets/plugins/custom/formrepeater/formrepeater.bundle.js' %}"></script>
+	
+	<script src="{% static 'dashboard/assets/plugins/custom/cropper/cropper.bundle.js' %}"></script>
+	<script>
+		function urltoFile(url, filename, mimeType){		
+			return (fetch(url)
+				.then(function(res){return res.arrayBuffer();})
+				.then(function(buf){return new File([buf], filename,{type:mimeType});})
+			);
+		}
+		
+		function getCookie(cname) {
+			let name = cname + "=";
+			let decodedCookie = decodeURIComponent(document.cookie);
+			let ca = decodedCookie.split(';');
+			for(let i = 0; i <ca.length; i++) {
+			  let c = ca[i];
+			  while (c.charAt(0) == ' ') {
+				c = c.substring(1);
+			  }
+			  if (c.indexOf(name) == 0) {
+				return c.substring(name.length, c.length);
+			  }
+			}
+			return "";
+		}
+
+		function textToElement(html){
+			var template = document.createElement('template');
+			html = html.trim(); // Never return a text node of whitespace as the result
+			template.innerHTML = html;
+			return template.content.firstChild;
+		}
+		function image_type_from_name(fileName){
+			var tp = fileName.substring(fileName.length - 4).split('.').join("");
+			if(tp == 'png')
+				return 'image/png';
+			else if(tp == 'svg')
+				return 'image/svg+xml';
+			return 'image/jpeg';
+			
+		}
+		function file_input_set_file(fileInput, value){
+			if(value){
+				var fileName = value.substring(value.lastIndexOf('/')+1);
+				var mimeType = image_type_from_name(fileName);
+				urltoFile(value, fileName, mimeType).then(function(file){
+					//Create a DataTransfer to get a FileList
+					const dataTransfer = new DataTransfer();
+					dataTransfer.items.add(file);
+					fileInput.files = dataTransfer.files;
+				});
+			}
+			else{
+				fileInput.value="";
+			}
+		}
+		var optionFormat = function(item) {		
+			var span = document.createElement('span');
+			var template = item.text;
+		
+			span.innerHTML = template;
+		
+			return $(span);
+		}
+
+		const toBase64 = (element, file) => new Promise((resolve, reject) => {
+			const reader = new FileReader();
+			reader.readAsDataURL(file);
+			reader.onload = () => resolve(element.setAttribute('src', reader.result));
+			reader.onerror = error => reject(error);
+		});
+		
+		document.addEventListener("DOMContentLoaded", function(event) {
+			var banner_image = document.getElementById('banner_image');
+			var is_image_edited = document.getElementById('is_image_edited');
+			var banner_cropper = new Cropper(banner_image, {
+				aspectRatio: 1200 / 1200,
+				autoCropArea: 1,
+				viewMode: 1,
+				crop: function(e) {
+					
+				}
+			});
+			var album_input = document.querySelector('[name="album"]');
+			var year_input = document.querySelector('[name="year"]');
+			const albums_list = [];
+			
+			{% for alb in albums %}
+				albums_list.push({
+					"id": {{alb.album_id}},
+					"year": {{alb.album.year}}
+				});
+			{% endfor %}
+			console.log(albums_list);
+			$(document.body).on("change",album_input,function(){
+				for(var alb of albums_list){
+					if(album_input.value == alb.id){
+						year_input.value=alb.year;
+					}
+				}
+			});
+			
+
+			document.querySelector("#banner_image_input").addEventListener('change',function(e){
+				is_image_edited.checked=true;
+				banner_cropper.destroy();
+				banner_image.src = URL.createObjectURL(this.files[0]);
+				
+				banner_cropper = new Cropper(banner_image, {
+					aspectRatio: 400 / 400,
+					autoCropArea: 0,
+					viewMode: 1,
+					crop: function(e) {
+						
+					}
+				});
+				
+			});
+			
+			$("#song-detail-form").submit(function(e) {
+				e.preventDefault(); // avoid to execute the actual submit of the form.
+				
+				var form = $(this);
+				var actionUrl = form.attr('action');
+				var formDataOld = new FormData(form[0]);
+				
+			
+				formDataOld.set("top",document.querySelector("#is_top").checked);
+				formDataOld.set("hit",document.querySelector("#is_hit").checked);
+				if(is_image_edited.checked){
+					banner_cropper.getCroppedCanvas().toBlob(function(blob){
+						var file = new File([blob], "banner.jpg", {lastModified: new Date()});
+						formDataOld.append('croppedImage', file);
+						formDataOld.set("is_image_edited",true);
+						$.ajax({
+							type: "POST",
+							url: actionUrl,
+							csrfmiddlewaretoken: '{{ csrf_token }}',
+							data: formDataOld, // serializes the form's elements.
+							beforeSend: function(){
+								Swal.fire({
+									text: "Creating song",
+									icon: "info",
+									buttonsStyling: false,
+									showConfirmButton: false,
+									allowOutsideClick: false
+								});
+							},
+							success: function(data, status)
+							{
+								Swal.fire({
+									text: "Song successfully created",
+									icon: "success",
+									buttonsStyling: false,
+									confirmButtonText: "Ok, got it!",
+									customClass: {
+										confirmButton: "btn fw-bold btn-primary",
+									}
+								}).then(function (){
+									window.location.replace("{% url 'dashboard:artist-details' artist_id %}");
+								});
+								
+							},
+							error: function(request, status, error){
+								Swal.fire({
+									text: request.responseJSON.message,
+									icon: "error",
+									buttonsStyling: false,
+									confirmButtonText: "Ok, got it!",
+									customClass: {
+										confirmButton: "btn fw-bold btn-primary",
+									}
+								});
+							},
+							cache: false,
+							contentType: false,
+							processData: false
+						});
+					});
+				}else{
+					formDataOld.set("is_image_edited",false);
+					$.ajax({
+						type: "POST",
+						url: actionUrl,
+						csrfmiddlewaretoken: '{{ csrf_token }}',
+						data: formDataOld, // serializes the form's elements.
+						beforeSend: function(){
+							Swal.fire({
+								text: "Creating song",
+								icon: "info",
+								buttonsStyling: false,
+								showConfirmButton: false,
+								allowOutsideClick: false
+							});
+						},
+						success: function(data, status)
+						{
+							Swal.fire({
+								text: "Song successfully created",
+								icon: "success",
+								buttonsStyling: false,
+								confirmButtonText: "Ok, got it!",
+								customClass: {
+									confirmButton: "btn fw-bold btn-primary",
+								}
+							}).then(function (){
+								window.location.replace("{% url 'dashboard:artist-details' artist_id %}");
+							});
+							
+						},
+						error: function(request, status, error){
+							Swal.fire({
+								text: request.responseJSON.message,
+								icon: "error",
+								buttonsStyling: false,
+								confirmButtonText: "Ok, got it!",
+								customClass: {
+									confirmButton: "btn fw-bold btn-primary",
+								}
+							});
+						},
+						cache: false,
+						contentType: false,
+						processData: false
+					});
+				}
+			});
+			const song_artists = $('#song_artists');
+			
+			song_artists.select2({
+				minimumInputLength: 2,
+				templateSelection: optionFormat,
+				templateResult: optionFormat,
+				ajax: {
+					url: "{% url 'dashboard:AlbumArtistsListView' %}",
+					dataType: 'json',
+					type: "GET",
+					delay: 500,
+					data: function (params) {
+						return {
+							search_user: params.term
+						};
+					},
+					processResults: function (data) {
+						
+							var res = data.map(function (item) {
+								return {
+									id: item.id, 
+									text: item.name
+								};
+							});
+						return {
+							results: res
+						};
+					}
+				},
+			});
+			
+		});
+
+		
+		
+	</script>
+{% endblock %}

@@ -1,0 +1,467 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% load utils%}
+{% block title %}{{ title }}{% endblock title %}
+{% block content %}
+<link href="{% static 'admin/assets/plugins/custom/cropper/cropper.bundle.css' %}" rel="stylesheet" type="text/css" />
+	<div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+		<!--begin::Content wrapper-->
+		<div class="d-flex flex-column flex-column-fluid">
+			<!--begin::Toolbar-->
+			<div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+				<!--begin::Toolbar container-->
+				<div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack">
+					<!--begin::Page title-->
+					<div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+						<!--begin::Title-->
+						<h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Sale account Detais</h1>
+						<!--end::Title-->
+						<!--begin::Breadcrumb-->
+						<ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+							<!--begin::Item-->
+							<li class="breadcrumb-item text-muted">
+								<a href="{% url 'dashboard:users' %}" class="text-muted text-hover-primary">Home</a>
+							</li>
+							<!--end::Item-->
+							<!--begin::Item-->
+							<li class="breadcrumb-item">
+								<span class="bullet bg-gray-400 w-5px h-2px"></span>
+							</li>
+							<!--end::Item-->
+							<!--begin::Item-->
+							<li class="breadcrumb-item text-muted">Sale-account-details</li>
+							<!--end::Item-->
+						</ul>
+						<!--end::Breadcrumb-->
+					</div>
+					<!--end::Page title-->
+				</div>
+				<!--end::Toolbar container-->
+			</div>
+			<!--end::Toolbar-->
+			<!--begin::Content-->
+			<div id="kt_app_content" class="app-content flex-column-fluid">
+				<!--begin::Content container-->
+				<div id="kt_app_content_container" class="app-container container-xxl">
+					<!--begin::Card-->
+					<div class="card">
+						<!--begin::Card body-->
+						<div class="card-body py-4">
+							<form class="form" action="{% url 'dashboard:create-sale' %}" id="sale-detail-form">
+								<!--begin::Step 1-->
+								{% csrf_token %}
+								<input type="text" name="sale_id" class="form-control d-none" placeholder="" value="{{sale.id}}"/>
+								<div class="d-flex flex-column me-n7 pe-7">
+									<div class="row mb-7">
+										<div class="col-6">
+											<div class="position-relative mb-3">
+												<label class="form-label fs-6 fw-semibold">Name tk:</label>
+												<input type="text" name="name_tk" class="form-control" placeholder="Name tk" value="{{sale.name_tk}}"/>
+											</div>
+										</div>
+										<div class="col-6">
+											<div class="position-relative mb-3">
+												<label class="form-label fs-6 fw-semibold">Name ru:</label>
+												<input type="text" name="name_ru" class="form-control" placeholder="Name ru" value="{{sale.name_ru}}"/>
+											</div>
+										</div>
+									</div>
+									<div class="row mb-7">
+										<div class="col-6">
+											<div class="position-relative mb-3">
+												<label class="form-label fs-6 fw-semibold">Description tk:</label>
+												<textarea  class="form-control form-control-solid me-10" name="description_tk" >{{sale.description_tk}}</textarea>
+											</div>
+										</div>
+										<div class="col-6">
+											<div class="position-relative mb-3">
+												<label class="form-label fs-6 fw-semibold">Description ru:</label>
+												<textarea  class="form-control form-control-solid me-10" name="description_ru" >{{sale.description_ru}}</textarea>
+											</div>
+										</div>
+									</div>
+									<div class="row mb-7">
+										<div class="col-6">
+											<label class="form-label fs-6 fw-semibold">Price:</label>
+											<input type="text" name="price" class="form-control" placeholder="Price" value="{{sale.price|floatformat:2}}"/>
+										</div>
+										<div class="col-6">
+											<label class="form-label fs-6 fw-semibold">Old Price:</label>
+											<input type="text" name="old_price" class="form-control" placeholder="Old Price" value="{{sale.old_price|floatformat:2}}"/>
+										</div>
+									</div>
+									<div class="row mb-7">
+										<div class="col-4">
+											<label class="fw-semibold fs-6 mb-2">Has Discount?</label>
+											<div class="form-check form-switch form-check-custom form-check-solid">
+												<input class="form-check-input" type="checkbox" name="has_discount" {% if sale.has_discount %}checked="true"{% endif %} id="has_discount"/>
+												<label class="form-check-label" for="has_discount">
+													Discount
+												</label>
+											</div>
+										</div>
+										<div class="col-4">
+											<label class="fw-semibold fs-6 mb-2">Vip?</label>
+											<div class="form-check form-switch form-check-custom form-check-solid">
+												<input class="form-check-input" type="checkbox" name="is_vip" {% if sale.is_vip %}checked="true"{% endif %} id="is_vip"/>
+												<label class="form-check-label" for="is_vip">
+													Vip
+												</label>
+											</div>
+										</div>
+										<div class="col-4">
+											<label class="form-label fs-6 fw-semibold">Phone Number:</label>
+											<input type="text" name="phone" class="form-control" placeholder="61xxxxxx" value="{{sale.phone}}"/>
+										</div>
+									</div>
+									<div class="row mb-7">
+										<div class="col-6">
+											<label class="form-label fs-6 fw-semibold">Start Date:</label>
+    										<input class="form-control form-control-solid" placeholder="Start" name="start_date" id="start_date"/>
+										</div>
+										<div class="col-6">
+											<label class="form-label fs-6 fw-semibold">End Date:</label>
+    										<input class="form-control form-control-solid" placeholder="End" name="end_date" id="end_date"/>
+										</div>
+									</div>
+
+									<div id="images">
+										<!--begin::Form group-->
+										<div class="form-group">
+											<div data-repeater-list="images" id="image_repeater">
+												<label class="form-label">Images:</label>
+												
+												
+											</div>
+										</div>
+										<!--end::Form group-->
+
+										<!--begin::Form group-->
+										<div class="form-group mt-5">
+											<a href="javascript:;" id="create_image_input" class="btn btn-light-primary">
+												<i class="la la-plus"></i>Add
+											</a>
+										</div>
+										<!--end::Form group-->
+									</div>
+									<!--end::Repeater-->
+								</div>
+								<div class="d-flex justify-content-between pt-15">
+									<a href="{% url 'dashboard:sale-accounts' %}" class="btn btn-info" >
+										<span class="indicator-label">Back</span>
+									</a>
+									<button type="submit" class="btn btn-primary" >
+										<span class="indicator-label">Save</span>
+										<span class="indicator-progress">Please wait...
+										<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+									</button>
+									<button type="reset" class="btn btn-secondary d-none" id="reset-form">Cancel</button>
+								</div>
+								
+								<!--begin::Repeater-->
+								
+								<!--end::Repeater-->
+							</form>
+
+							
+						</div>
+						<!--end::Card body-->
+					</div>
+					<!--end::Card-->
+				</div>
+				<!--end::Content container-->
+			</div>
+			<!--end::Content-->
+		</div>
+		<!--end::Content wrapper-->
+		<!--begin::Footer-->
+		<div id="kt_app_footer" class="app-footer">
+			<!--begin::Footer container-->
+			<div class="app-container container-fluid d-flex flex-column flex-md-row flex-center flex-md-stack py-3">
+				<!--begin::Copyright-->
+				<div class="text-dark order-2 order-md-1">
+					<span class="text-muted fw-semibold me-1">2022©</span>
+					<a href="https://azico.team" target="_blank" class="text-gray-800 text-hover-primary">AZICO TEAM</a>
+				</div>
+				<!--end::Copyright-->
+			</div>
+			<!--end::Footer container-->
+		</div>
+		<!--end::Footer-->
+	</div>
+	<!--CKEditor Build Bundles:: Only include the relevant bundles accordingly-->
+	
+{% endblock content %}
+
+
+{% block script %}
+	<script src="{% static 'admin/assets/plugins/custom/formrepeater/formrepeater.bundle.js' %}"></script>
+	
+	<script src="{% static 'admin/assets/plugins/custom/cropper/cropper.bundle.js' %}"></script>
+	<script>
+		function urltoFile(url, filename, mimeType){		
+			return (fetch(url)
+				.then(function(res){return res.arrayBuffer();})
+				.then(function(buf){return new File([buf], filename,{type:mimeType});})
+			);
+		}
+		
+		function getCookie(cname) {
+			let name = cname + "=";
+			let decodedCookie = decodeURIComponent(document.cookie);
+			let ca = decodedCookie.split(';');
+			for(let i = 0; i <ca.length; i++) {
+			  let c = ca[i];
+			  while (c.charAt(0) == ' ') {
+				c = c.substring(1);
+			  }
+			  if (c.indexOf(name) == 0) {
+				return c.substring(name.length, c.length);
+			  }
+			}
+			return "";
+		}
+		$('#sale_prizes').repeater({
+			initEmpty: false,
+		
+			defaultValues: {
+				'text-input': 'foo'
+			},
+		
+			show: function () {
+				$(this).slideDown();
+			},
+		
+			hide: function (deleteElement) {
+				$(this).slideUp(deleteElement);
+			}
+		});
+		$('#images').repeater({
+			initEmpty: false,
+		
+			defaultValues: {
+				'text-input': 'foo'
+			},
+		
+			show: function () {
+				$(this).slideDown();
+			},
+		
+			hide: function (deleteElement) {
+				$(this).slideUp(deleteElement);
+			}
+		});
+
+		function textToElement(html){
+			var template = document.createElement('template');
+			html = html.trim(); // Never return a text node of whitespace as the result
+			template.innerHTML = html;
+			return template.content.firstChild;
+		}
+		function image_type_from_name(fileName){
+			var tp = fileName.substring(fileName.length - 4).split('.').join("");
+			if(tp == 'png')
+				return 'image/png';
+			else if(tp == 'svg')
+				return 'image/svg+xml';
+			return 'image/jpeg';
+			
+		}
+		function file_input_set_file(fileInput, value){
+			if(value){
+				var fileName = value.substring(value.lastIndexOf('/')+1);
+				var mimeType = image_type_from_name(fileName);
+				urltoFile(value, fileName, mimeType).then(function(file){
+					//Create a DataTransfer to get a FileList
+					const dataTransfer = new DataTransfer();
+					dataTransfer.items.add(file);
+					fileInput.files = dataTransfer.files;
+				});
+			}
+			else{
+				fileInput.value="";
+			}
+		}
+		var optionFormat = function(item) {		
+			var span = document.createElement('span');
+			var template = item.text;
+		
+			span.innerHTML = template;
+		
+			return $(span);
+		}
+		
+		$('#start_date').daterangepicker({
+			"singleDatePicker": true,
+			"showDropdowns": true,
+			"startDate": "{% convert_date sale.start_date %}",
+			"timePicker": false,
+			"timePicker24Hour": false,
+			"autoApply": true,
+			"locale": {
+				"format": "YYYY-MM-DD"
+			},
+			ranges: {
+				'Now': [moment()]
+			}
+		});
+		$('#end_date').daterangepicker({
+			"singleDatePicker": true,
+			"showDropdowns": true,
+			"startDate": "{% convert_date sale.end_date %}",
+			"timePicker": false,
+			"timePicker24Hour": false,
+			"autoApply": true,
+			"locale": {
+				"format": "YYYY-MM-DD"
+			},
+			ranges: {
+				'Now': [moment()]
+			}
+		});
+		
+		const toBase64 = (element, file) => new Promise((resolve, reject) => {
+			const reader = new FileReader();
+			reader.readAsDataURL(file);
+			reader.onload = () => resolve(element.setAttribute('src', reader.result));
+			reader.onerror = error => reject(error);
+		});
+		
+		document.addEventListener("DOMContentLoaded", function(event) {
+			var image_repeater = document.querySelector("#image_repeater");
+
+			{% for im in sale.images.all %}
+				var image_repeater_clone = textToElement('<div data-repeater-item class="mb-10"><div class="form-group row"><div class="col-md-3 mb-7"><div class="image-input image-input-outline  image-input-empty" data-kt-image-input="true" style="background-image: url({{im.image.url}})"><div class="image-input-wrapper w-80px h-80px"></div><label class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"data-kt-image-input-action="change"data-bs-toggle="tooltip"data-bs-dismiss="click"title="Question Image"><i class="bi bi-pencil-fill fs-7"></i><input type="file" name="image" accept=".png, .jpg, .jpeg" /></label><span class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="cancel" data-bs-toggle="tooltip" data-bs-dismiss="click" title="Cancel image"> <i class="bi bi-x fs-2"></i> </span> <span class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="remove" data-bs-toggle="tooltip" data-bs-dismiss="click" title="Remove image"> <i class="bi bi-x fs-2"></i> </span> </div> </div> <div class="col-md-5"><img src="{{im.image.url}}" width="100%"></div><div class="col-md-4 mb-3"> <a href="javascript:;" data-repeater-delete class="btn btn-sm btn-light-danger"> <i class="la la-trash-o"></i></a> </div></div> </div>');
+				file_input_set_file(image_repeater_clone.firstChild.firstChild.firstChild.firstChild.nextSibling.lastChild, "{{im.image.url}}");
+				image_repeater.appendChild(image_repeater_clone);
+				var imageInputElement = image_repeater_clone.firstChild.firstChild.querySelector(".image-input")
+				new KTImageInput(imageInputElement);
+				var imageInput = KTImageInput.getInstance(imageInputElement);
+				imageInput.on("kt.imageinput.changed", function(e, data) {
+					toBase64(image_repeater_clone.firstChild.firstChild.nextElementSibling.firstChild, e.getInputElement().files[0]);
+				});
+				
+				imageInput.on("kt.imageinput.canceled", function(e, data) {
+					image_repeater_clone.firstChild.firstChild.nextElementSibling.firstChild.setAttribute('src', '');
+				});
+			{%endfor%}
+			
+
+
+			document.querySelector("#create_image_input").addEventListener('click', function (e){
+				e.preventDefault();
+				var image_repeater_clone = textToElement('<div data-repeater-item class="mb-10"><div class="form-group row"><div class="col-md-3 mb-7"><div class="image-input image-input-outline  image-input-empty" data-kt-image-input="true" style="background-image: url({% static 'admin/assets/media/svg/avatars/blank.svg' %})"><div class="image-input-wrapper w-80px h-80px"></div><label class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"data-kt-image-input-action="change"data-bs-toggle="tooltip"data-bs-dismiss="click"title="Question Image"><i class="bi bi-pencil-fill fs-7"></i><input type="file" name="image" accept=".png, .jpg, .jpeg" /></label><span class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="cancel" data-bs-toggle="tooltip" data-bs-dismiss="click" title="Cancel image"> <i class="bi bi-x fs-2"></i> </span> <span class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="remove" data-bs-toggle="tooltip" data-bs-dismiss="click" title="Remove image"> <i class="bi bi-x fs-2"></i> </span> </div> </div> <div class="col-md-5"><img src="{{im.image.url}}" width="100%"></div><div class="col-md-4 mb-3"> <a href="javascript:;" data-repeater-delete class="btn btn-sm btn-light-danger"> <i class="la la-trash-o"></i></a> </div> </div> </div>');
+				
+				image_repeater.appendChild(image_repeater_clone);
+				var imageInputElement = image_repeater_clone.firstChild.firstChild.querySelector(".image-input");
+				new KTImageInput(imageInputElement);
+				var imageInput = KTImageInput.getInstance(imageInputElement);
+				imageInput.on("kt.imageinput.changed", function(e, data) {
+					toBase64(image_repeater_clone.firstChild.firstChild.nextElementSibling.firstChild, e.getInputElement().files[0]);
+				});
+				imageInput.on("kt.imageinput.canceled", function(e, data) {
+					image_repeater_clone.firstChild.firstChild.nextElementSibling.firstChild.setAttribute('src', '');
+				});
+			});
+
+			$("#sale-detail-form").submit(function(e) {
+				e.preventDefault(); // avoid to execute the actual submit of the form.
+				
+				var form = $(this);
+				var actionUrl = form.attr('action');
+				var formDataOld = new FormData(form[0]);
+				
+				formDataOld.set("has_discount",document.querySelector("#has_discount").checked);
+				formDataOld.set("is_vip",document.querySelector("#is_vip").checked);
+				var formData = new FormData()
+				for (var pair of formDataOld.entries()) {
+					
+					if(pair[0].includes("image"))
+						formData.append("image[]", pair[1])
+					else
+						formData.append(pair[0], pair[1])
+				}
+
+				
+				$.ajax({
+					type: "POST",
+					url: actionUrl,
+					csrfmiddlewaretoken: '{{ csrf_token }}',
+					data: formData, // serializes the form's elements.
+					beforeSend: function(){
+						Swal.fire({
+							text: "Creating sale",
+							icon: "info",
+							buttonsStyling: false,
+							showConfirmButton: false,
+							allowOutsideClick: false
+						});
+					},
+					success: function(data, status)
+					{
+						Swal.fire({
+							text: "sale successfully created",
+							icon: "success",
+							buttonsStyling: false,
+							confirmButtonText: "Ok, got it!",
+							customClass: {
+								confirmButton: "btn fw-bold btn-primary",
+							}
+						}).then(function (){
+							window.location.replace("{% url 'dashboard:sale-accounts' %}");
+						});
+						
+					},
+					error: function(request, status, error){
+						Swal.fire({
+							text: "Something went wrong!",
+							icon: "error",
+							buttonsStyling: false,
+							confirmButtonText: "Ok, got it!",
+							customClass: {
+								confirmButton: "btn fw-bold btn-primary",
+							}
+						});
+					},
+					cache: false,
+					contentType: false,
+					processData: false
+				});
+				
+			});
+			
+			$('#owner_user').select2({
+				minimumInputLength: 6,
+				templateSelection: optionFormat,
+    			templateResult: optionFormat,
+            	ajax: {
+					url: "",
+					dataType: 'json',
+					type: "GET",
+					delay: 500,
+					data: function (params) {
+						return {
+							search_user: params.term
+						};
+					},
+					processResults: function (data) {
+						
+							var res = data.map(function (item) {
+								return {
+									id: item.id, 
+									text: `<span style="margin:0 5px;" class="badge badge-primary">
+										<span style="margin:0 5px;" class="badge badge-secondary">` + item.phone + `</span>` + item.full_name + `</span>`
+								};
+							});
+						return {
+							results: res
+						};
+					}
+				},
+           });
+		});
+
+		
+		
+	</script>
+{% endblock %}

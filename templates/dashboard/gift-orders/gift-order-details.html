@@ -1,0 +1,327 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% load utils%}
+{% block title %}{{ title }}{% endblock title %}
+{% block content %}
+<link href="{% static 'admin/assets/plugins/custom/cropper/cropper.bundle.css' %}" rel="stylesheet" type="text/css" />
+	<div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+		<div class="d-flex flex-column flex-column-fluid">
+			<div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+				<div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack">
+					<div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+						<h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Gift Order Detais</h1>
+						<ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+							<li class="breadcrumb-item text-muted">
+								<a href="{% url 'dashboard:users' %}" class="text-muted text-hover-primary">Home</a>
+							</li>
+							<li class="breadcrumb-item">
+								<span class="bullet bg-gray-400 w-5px h-2px"></span>
+							</li>
+							<li class="breadcrumb-item text-muted">Gift-order-details</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div id="kt_app_content" class="app-content flex-column-fluid">
+				<div id="kt_app_content_container" class="app-container container-xxl">
+					<div class="card">
+						<div class="card-body py-4">
+							<form class="form" action="{% url 'dashboard:create-gift-order' %}" id="gift-order-detail-form">
+								{% csrf_token %}
+								<input type="text" name="gift_order_id" class="form-control d-none" placeholder="" value="{{gift_order.id}}"/>
+								<div class="d-flex flex-column me-n7 pe-7">
+									<div class="row mb-7">
+										<div class="col-6">
+											<div class="position-relative mb-3">
+												<label class="form-label fs-6 fw-semibold">Username:</label>
+												<input type="text" name="full_name" class="form-control form-control-solid"  value="{{gift_order.owner.full_name}}" readonly/>
+											</div>
+										</div>
+										<div class="col-6">
+											<div class="position-relative mb-3">
+												<label class="form-label fs-6 fw-semibold">Phone Number:</label>
+												<input type="text" name="phone" class="form-control form-control-solid"  value="{{gift_order.owner.phone}}" readonly/>
+											</div>
+										</div>
+									</div>
+									<div class="row mb-7">
+										<div class="col-6">
+											<div class="position-relative mb-3">
+												<label class="form-label fs-6 fw-semibold">Order №:</label>
+												<input type="text" name="order_no" class="form-control form-control-solid" placeholder="Order №" value="{{gift_order.order_no}}" readonly/>
+											</div>
+										</div>
+										<div class="col-6">
+											<div class="position-relative mb-3">
+												<label class="form-label fs-6 fw-semibold">Status:</label>
+												<select name="status" required class="form-select form-select-solid fw-bold" data-kt-select2="true" data-placeholder="Select Status" data-allow-clear="true" data-hide-search="true">
+													<option></option>
+													<option value="1" {% if gift_order.status == 1 %} selected {% endif %}>Waiting</option>
+													<option value="2" {% if gift_order.status == 2 %} selected {% endif %}>Accepted</option>
+													<option value="3" {% if gift_order.status == 3 %} selected {% endif %}>Denied</option>
+													
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="row mb-7">
+										<div class="col-6">
+											<div class="position-relative mb-3">
+												<label class="form-label fs-6 fw-semibold">Discount:</label>
+												<input type="text" name="discount" class="form-control form-control-solid" placeholder="" value="{{gift_order.discount}}" readonly/>
+											</div>
+										</div>
+										<div class="col-6">
+											<div class="position-relative mb-3">
+												<label class="form-label fs-6 fw-semibold">Discount TMT?:</label>
+												
+													{% if gift_order.discount_tmt %}
+														<span class="badge badge-success">Yes</span>
+														{% else %}
+														<span class="badge badge-danger">No</span>
+													{% endif %}
+													
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row mb-7">
+										<div class="col-6">
+											<label class="form-label fs-6 fw-semibold">Total:</label>
+											<input class="form-control form-control-solid" placeholder="0" name="total" value="{{gift_order.total|floatformat:2}}" readonly/>
+										</div>
+										<div class="col-6">
+											<label class="form-label fs-6 fw-semibold">Total Payed:</label>
+											<input class="form-control form-control-solid" placeholder="0" name="total_payed" value="{{gift_order.total_payed|floatformat:2}}" readonly/>
+										</div>
+									</div>
+									
+									<div class="row mb-7">
+										<div class="col-6">
+											<label class="form-label fs-6 fw-semibold">Coupon Code:</label>
+    										<input class="form-control form-control-solid" placeholder="" name="coupn_code" value="{{gift_order.coupn_code}}" readonly/>
+										</div>
+										<div class="col-6">
+											<label class="form-label fs-6 fw-semibold">Created At:</label>
+											<input class="form-control form-control-solid" placeholder="Created date" name="created_at" value="{{gift_order.created_at}}" readonly/>
+										</div>
+									</div>
+								</div>
+								<div class="d-flex justify-content-between pt-15">
+									<a href="{% url 'dashboard:gift-orders' %}" class="btn btn-info" >
+										<span class="indicator-label">Back</span>
+									</a>
+									<button type="submit" class="btn btn-primary" >
+										<span class="indicator-label">Save</span>
+										<span class="indicator-progress">Please wait...
+										<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+									</button>
+									<button type="reset" class="btn btn-secondary d-none" id="reset-form">Cancel</button>
+								</div>
+							</form>
+							<div id="kt_app_content" class="app-content flex-column-fluid">
+								<div id="kt_app_content_container" class="app-container container-xxl">
+									<div class="card">
+										<div class="card-header border-0 pt-6">
+											<div class="card-title">
+												<div class="d-flex align-items-center position-relative my-1">
+													<span class="svg-icon svg-icon-1 position-absolute ms-6">
+														<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+															<rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor" />
+															<path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor" />
+														</svg>
+													</span>
+													<input type="text" data-kt-user-table-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Search Gift Order Items" />
+												</div>
+											</div>
+										</div>
+										<div class="card-body py-4">
+											<table class="table align-middle table-row-dashed fs-8 gy-3 gx-1" id="kt_table">
+												<thead>
+													<tr class="text-start text-muted fw-bold fs-7  gs-0">
+														<th class="">#</th>
+														<th class="min-w-100px">Name</th>
+														<th class="min-w-50px">Price</th>
+														<th class="min-w-50px">Old Price</th>
+														<th class="min-w-50px">Quantity</th>
+													</tr>
+												</thead>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="kt_app_footer" class="app-footer">
+			<div class="app-container container-fluid d-flex flex-column flex-md-row flex-center flex-md-stack py-3">
+				<div class="text-dark order-2 order-md-1">
+					<span class="text-muted fw-semibold me-1">2023©</span>
+					<a href="https://azico.team" target="_blank" class="text-gray-800 text-hover-primary">AZICO TEAM</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+{% endblock content %}
+
+{% block script %}
+	<script>
+		function getCookie(cname) {
+			let name = cname + "=";
+			let decodedCookie = decodeURIComponent(document.cookie);
+			let ca = decodedCookie.split(';');
+			for(let i = 0; i <ca.length; i++) {
+			  let c = ca[i];
+			  while (c.charAt(0) == ' ') {
+				c = c.substring(1);
+			  }
+			  if (c.indexOf(name) == 0) {
+				return c.substring(name.length, c.length);
+			  }
+			}
+			return "";
+		}
+		
+		document.addEventListener("DOMContentLoaded", function(event) {
+			$("#gift-order-detail-form").submit(function(e) {
+				e.preventDefault(); // avoid to execute the actual submit of the form.
+				
+				var form = $(this);
+				var actionUrl = form.attr('action');
+				var formData = new FormData(form[0]);
+				
+				$.ajax({
+					type: "POST",
+					url: actionUrl,
+					csrfmiddlewaretoken: '{{ csrf_token }}',
+					data: formData, // serializes the form's elements.
+					beforeSend: function(){
+						Swal.fire({
+							text: "Updating Gift order",
+							icon: "info",
+							buttonsStyling: false,
+							showConfirmButton: false,
+							allowOutsideClick: false
+						});
+					},
+					success: function(data, status)
+					{
+						Swal.fire({
+							text: data.message,
+							icon: "success",
+							buttonsStyling: false,
+							confirmButtonText: "Ok, got it!",
+							customClass: {
+								confirmButton: "btn fw-bold btn-primary",
+							}
+						}).then(function (){
+							window.location.replace("{% url 'dashboard:gift-orders' %}");
+						});
+						
+					},
+					error: function(request, status, error){
+						Swal.fire({
+							text: "Something went wrong!",
+							icon: "error",
+							buttonsStyling: false,
+							confirmButtonText: "Ok, got it!",
+							customClass: {
+								confirmButton: "btn fw-bold btn-primary",
+							}
+						});
+					},
+					cache: false,
+					contentType: false,
+					processData: false
+				});
+				
+			});
+			
+		});
+
+		var KTDatatablesServerSide = function () {
+		// Shared variables
+		var table;
+		var dt;
+		var filterPayment;
+		var status = ["primary", "danger", "primary", "success", "info", "danger", "warning"];
+
+		// Private functions
+		var initDatatable = function () {
+			dt = $("#kt_table").DataTable({
+				searchDelay: 50000,
+				processing: true,
+				serverSide: true,
+				order: [[2, 'desc']],
+				
+				lengthMenu: [
+					[20, 50, 100, 500],
+					[20, 50, 100, 500],
+				],
+				ajax: {
+					url: "{% url 'dashboard:GiftOrdersItemsListView' %}" + "?gift_order_id={{gift_order.id}}",
+				},
+				
+				columns: [
+					{ data: 'id' },
+					{ data: 'name' },
+					{ data: 'price' },
+					{ data: 'old_price' },
+					{ data: 'quantity' },
+				],
+				columnDefs: [
+					{
+						targets: 2,
+						render: function (data, type, row) {
+							return parseFloat(data).toFixed(2);
+						}
+					},
+					{
+						targets: 3,
+						render: function (data, type, row) {
+							return parseFloat(data).toFixed(2);
+						}
+					},
+				],
+				
+			});
+
+			table = dt.$;
+			
+			dt.on('draw', function () {
+				KTMenu.createInstances();
+			});
+			
+		}
+
+		var handleSearchDatatable = function () {
+			const filterSearch = document.querySelector('[data-kt-user-table-filter="search"]');
+			filterSearch.addEventListener('keyup', function (e) {
+				if (e.key === 'Enter' || e.keyCode === 13) {
+					dt.search(e.target.value).draw();
+				}
+			});
+		}
+		
+		return {
+			init: function () {
+				initDatatable();
+				handleSearchDatatable();
+			},
+			reload: function() {
+				dt.draw();
+			}
+		}
+	}();
+
+	// On document ready
+	KTUtil.onDOMContentLoaded(function () {
+		KTDatatablesServerSide.init();
+	});
+		
+	</script>
+{% endblock %}

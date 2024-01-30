@@ -1,0 +1,648 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock title %}
+{% block content %}
+	<div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+		
+		<!--begin::Content wrapper-->
+		<div class="d-flex flex-column flex-column-fluid">
+			<!--begin::Toolbar-->
+			<div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+				<!--begin::Toolbar container-->
+				<div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack">
+					<!--begin::Page title-->
+					<div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+						<!--begin::Title-->
+						<h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Gift Cards</h1>
+						<!--end::Title-->
+						<!--begin::Breadcrumb-->
+						<ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+							<!--begin::Item-->
+							<li class="breadcrumb-item text-muted">
+								<a href="{% url 'dashboard:users' %}" class="text-muted text-hover-primary">Home</a>
+							</li>
+							<!--end::Item-->
+							<!--begin::Item-->
+							<li class="breadcrumb-item">
+								<span class="bullet bg-gray-400 w-5px h-2px"></span>
+							</li>
+							<!--end::Item-->
+							<!--begin::Item-->
+							<li class="breadcrumb-item text-muted">Gift Cards</li>
+							<!--end::Item-->
+						</ul>
+						<!--end::Breadcrumb-->
+					</div>
+					<!--end::Page title-->
+				</div>
+				<!--end::Toolbar container-->
+			</div>
+			<!--end::Toolbar-->
+			<!--begin::Content-->
+			<div id="kt_app_content" class="app-content flex-column-fluid">
+				<!--begin::Content container-->
+				<div id="kt_app_content_container" class="app-container container-xxl">
+					<!--begin::Card-->
+					<div class="card">
+						<!--begin::Card header-->
+						<div class="card-header border-0 pt-6">
+							<!--begin::Card title-->
+							<div class="card-title">
+								<!--begin::Search-->
+								<div class="d-flex align-items-center position-relative my-1">
+									<!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+									<span class="svg-icon svg-icon-1 position-absolute ms-6">
+										<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor" />
+											<path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor" />
+										</svg>
+									</span>
+									<!--end::Svg Icon-->
+									
+									<input type="text" data-kt-user-table-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Search Gifts" />
+								</div>
+								<!--end::Search-->
+							</div>
+							<!--begin::Card title-->
+							<!--begin::Card toolbar-->
+							<div class="card-toolbar">
+								<!--begin::Toolbar-->
+								<div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
+									<!--begin::Filter-->
+									<button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+									<!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
+									<span class="svg-icon svg-icon-2">
+										<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<path d="M19.0759 3H4.72777C3.95892 3 3.47768 3.83148 3.86067 4.49814L8.56967 12.6949C9.17923 13.7559 9.5 14.9582 9.5 16.1819V19.5072C9.5 20.2189 10.2223 20.7028 10.8805 20.432L13.8805 19.1977C14.2553 19.0435 14.5 18.6783 14.5 18.273V13.8372C14.5 12.8089 14.8171 11.8056 15.408 10.964L19.8943 4.57465C20.3596 3.912 19.8856 3 19.0759 3Z" fill="currentColor" />
+										</svg>
+									</span>
+									<!--end::Svg Icon-->Filter</button>
+									<!--begin::Menu 1-->
+									<div class="menu menu-sub menu-sub-dropdown w-300px w-md-325px" data-kt-menu="true">
+										<!--begin::Header-->
+										<div class="px-7 py-5">
+											<div class="fs-5 text-dark fw-bold">Filter Options</div>
+										</div>
+										<!--end::Header-->
+										<!--begin::Separator-->
+										<div class="separator border-gray-200"></div>
+										<!--end::Separator-->
+										<!--begin::Content-->
+										<div class="px-7 py-5" data-kt-user-table-filter="form">
+											<!--begin::Input group-->
+											
+											<!--end::Actions-->
+										</div>
+										<!--end::Content-->
+									</div>
+									<!--end::Menu 1-->
+									<!--end::Filter-->
+									<!--begin::Add user-->
+									<a href="{% url 'dashboard:gift-details' %}" class="btn btn-primary">
+									<!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+									<span class="svg-icon svg-icon-2">
+										<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="currentColor" />
+											<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="currentColor" />
+										</svg>
+									</span>
+									<!--end::Svg Icon-->Create Gift Card</a>
+									<!--end::Add user-->
+								</div>
+								<!--end::Toolbar-->
+								<!--begin::Group actions-->
+								<div class="d-flex justify-content-end align-items-center d-none" data-kt-user-table-toolbar="selected">
+									<div class="fw-bold me-5">
+									<span class="me-2" data-kt-user-table-select="selected_count"></span>Selected</div>
+									<button type="button" class="btn btn-danger" data-kt-user-table-select="delete_selected">Delete Selected</button>
+								</div>
+								<!--end::Group actions-->
+							</div>
+							<!--end::Card toolbar-->
+						</div>
+						<!--end::Card header-->
+						<!--begin::Card body-->
+						<div class="card-body py-4">
+							<!--begin::Table-->
+							<table class="table align-middle table-row-dashed fs-8 gy-3 gx-1" id="kt_table">
+								<!--begin::Table head-->
+								<thead>
+									<!--begin::Table row-->
+									<tr class="text-start text-muted fw-bold fs-7  gs-0">
+										<th class="w-10px pe-2">
+											<div class="form-check form-check-sm form-check-custom form-check-solid me-3">
+												<input class="form-check-input" type="checkbox" data-kt-check="true" data-kt-check-target="#kt_table .form-check-input" value="all" />
+											</div>
+										</th>
+										<th class="min-w-150px">Name</th>
+										<th class="min-w-100px">Image</th>
+										<th class="min-w-50px">Price</th>
+										<th class="min-w-50px">Old Price</th>
+										<th class="min-w-50px">Has Discount</th>
+										<th class="min-w-100px">Created Date</th>
+										<th class="text-end min-w-100px">Actions</th>
+									</tr>
+									<!--end::Table row-->
+								</thead>
+								<!--end::Table head-->
+								<!--begin::Table body-->
+								
+								<!--end::Table body-->
+							</table>
+							<!--end::Table-->
+
+							
+						</div>
+						<!--end::Card body-->
+					</div>
+					<!--end::Card-->
+				</div>
+				<!--end::Content container-->
+			</div>
+			<!--end::Content-->
+		</div>
+		<!--end::Content wrapper-->
+		<!--begin::Footer-->
+		<div id="kt_app_footer" class="app-footer">
+			<!--begin::Footer container-->
+			<div class="app-container container-fluid d-flex flex-column flex-md-row flex-center flex-md-stack py-3">
+				<!--begin::Copyright-->
+				<div class="text-dark order-2 order-md-1">
+					<span class="text-muted fw-semibold me-1">2022©</span>
+					<a href="https://azico.team" target="_blank" class="text-gray-800 text-hover-primary">AZICO TEAM</a>
+				</div>
+				<!--end::Copyright-->
+			</div>
+			<!--end::Footer container-->
+		</div>
+		<!--end::Footer-->
+
+	
+	</div>
+{% endblock content %}
+{% block script %}
+<script>
+	function image_type_from_name(fileName){
+		var tp = fileName.substring(fileName.length - 4).split('.').join("");
+		if(tp == 'png')
+			return 'image/png';
+		else if(tp == 'svg')
+			return 'image/svg+xml';
+		return 'image/jpeg';
+		
+	}
+	function urltoFile(url, filename, mimeType){		
+		return (fetch(url)
+			.then(function(res){return res.arrayBuffer();})
+			.then(function(buf){return new File([buf], filename,{type:mimeType});})
+		);
+	}
+	function file_input_set_file(key, value){
+		const fileInput = document.querySelector('input[name="' + key + '"');
+		var fileName = value.substring(value.lastIndexOf('/')+1)
+		var mimeType = image_type_from_name(fileName);
+		urltoFile(value, fileName, mimeType).then(function(file){
+			//Create a DataTransfer to get a FileList
+			const dataTransfer = new DataTransfer();
+			dataTransfer.items.add(file);
+			fileInput.files = dataTransfer.files;
+		});
+	}
+	
+	function getBase64Image(img) {
+		var canvas = document.createElement("canvas");
+		canvas.width = img.width;
+		canvas.height = img.height;
+		var ctx = canvas.getContext("2d");
+		ctx.drawImage(img, 0, 0);
+		var dataURL = canvas.toDataURL("image/png");
+		return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+	  }
+	  
+	function getCookie(cname) {
+		let name = cname + "=";
+		let decodedCookie = decodeURIComponent(document.cookie);
+		let ca = decodedCookie.split(';');
+		for(let i = 0; i <ca.length; i++) {
+		  let c = ca[i];
+		  while (c.charAt(0) == ' ') {
+			c = c.substring(1);
+		  }
+		  if (c.indexOf(name) == 0) {
+			return c.substring(name.length, c.length);
+		  }
+		}
+		return "";
+	}
+	
+	// Class definition
+	var KTDatatablesServerSide = function () {
+		// Shared variables
+		var table;
+		var dt;
+		var filterPayment;
+		var status = ["primary", "danger", "primary", "success", "info", "danger", "warning"];
+
+		// Private functions
+		var initDatatable = function () {
+			dt = $("#kt_table").DataTable({
+				searchDelay: 50000,
+				processing: true,
+				serverSide: true,
+				order: [[5, 'desc']],
+				
+				lengthMenu: [
+					[20, 50, 100, 500],
+					[20, 50, 100, 500],
+				],
+				select: {
+					style: 'multi',
+					selector: 'td:first-child input[type="checkbox"]',
+					className: 'row-selected'
+				},
+				ajax: {
+					url: "{% url 'dashboard:GiftsListView' %}",
+				},
+				
+				columns: [
+					{ data: 'id' },
+					{ data: 'name' },
+					{ data: 'image' },
+					{ data: 'price' },
+					{ data: 'old_price' },
+					{ data: 'has_discount' },
+					{ data: 'created_at' },
+					{ data: null },
+				],
+				columnDefs: [
+					{
+						targets: 0,
+						orderable: false,
+						render: function (data) {
+							return `
+								<div class="form-check form-check-sm form-check-custom form-check-solid">
+									<input class="form-check-input" type="checkbox" name="gift_checkbox_id" value="${data}" />
+								</div>`;
+						}
+					},
+					
+					{
+						targets: 2,
+						render: function (data, type, row) {
+							if(data)
+								return `<a href="${data}"  target=”_blank”><img src="${data}" class="w-100px me-3"></a>`;
+							return ``;
+						}
+					},
+					{
+						targets: 3,
+						render: function (data, type, row) {
+							return parseFloat(data).toFixed(2);
+						}
+					},
+					{
+						targets: 4,
+						render: function (data, type, row) {
+							return parseFloat(data).toFixed(2);
+						}
+					},
+					{
+						targets: 5,
+						render: function (data, type, row) {
+							if(data)
+								return `<i class="fa-solid fa-check text-success fs-3"></i>`;
+							return `<i class="fa-solid fa-ban text-danger fs-5"></i>`;
+							
+						}
+					},
+					
+					{
+						targets: -1,
+						data: null,
+						orderable: false,
+						className: 'text-end',
+						render: function (data, type, row) {
+							return `
+                            <a href="#" class="btn btn-secondary btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end">
+                                Actions
+                                <span class="svg-icon svg-icon-5 m-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <polygon points="0 0 24 0 24 24 0 24"></polygon>
+                                            <path d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z" fill="currentColor" fill-rule="nonzero" transform="translate(12.000003, 11.999999) rotate(-180.000000) translate(-12.000003, -11.999999)"></path>
+                                        </g>
+                                    </svg>
+                                </span>
+                            </a>
+                            <!--begin::Menu-->
+                            <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
+                                <!--begin::Menu item-->
+                                <div class="menu-item px-3">
+									<a href="{% url 'dashboard:gift-details' %}?id=`+row.id +`" class="menu-link px-3">
+										Edit
+									</a>
+                                </div>
+                                <!--end::Menu item-->
+
+                                <!--begin::Menu item-->
+                                <div class="menu-item px-3">
+                                    <a href="#" class="menu-link px-3" data-kt-user-table-filter="delete_row">
+                                        Delete
+                                    </a>
+                                </div>
+                                <!--end::Menu item-->
+                            </div>
+                            <!--end::Menu-->
+                        `;
+							
+						},
+					},
+				],
+				
+			});
+
+			table = dt.$;
+			
+			// Re-init functions on every table re-draw -- more info: https://datatables.net/reference/event/draw
+			dt.on('draw', function () {
+				
+				initToggleToolbar();
+				toggleToolbars();
+				handleDeleteRows();
+				KTMenu.createInstances();
+			});
+			
+		}
+
+		// Search Datatable --- official docs reference: https://datatables.net/reference/api/search()
+		var handleSearchDatatable = function () {
+			const filterSearch = document.querySelector('[data-kt-user-table-filter="search"]');
+			filterSearch.addEventListener('keyup', function (e) {
+				if (e.key === 'Enter' || e.keyCode === 13) {
+					dt.search(e.target.value).draw();
+				}
+			});
+		}
+		
+
+		// Delete Ad
+		var handleDeleteRows = () => {
+			// Select all delete buttons
+			const deleteButtons = document.querySelectorAll('[data-kt-user-table-filter="delete_row"]');
+
+			deleteButtons.forEach(d => {
+				// Delete button on click
+				d.addEventListener('click', function (e) {
+					e.preventDefault();
+
+					// Select parent row
+					const parent = e.target.closest('tr');
+
+					// Get customer name
+					const customerName = parent.querySelectorAll('td')[1].innerText;
+					
+
+					// SweetAlert2 pop up --- official docs reference: https://sweetalert2.github.io/
+					Swal.fire({
+						text: "Are you sure you want to delete " + customerName + "?",
+						icon: "warning",
+						showCancelButton: true,
+						buttonsStyling: false,
+						confirmButtonText: "Yes, delete!",
+						cancelButtonText: "No, cancel",
+						customClass: {
+							confirmButton: "btn fw-bold btn-danger",
+							cancelButton: "btn fw-bold btn-active-light-primary"
+						}
+					}).then(function (result) {
+						if (result.value) {
+							const gift_id = parent.querySelectorAll('input[name="gift_checkbox_id"]')[0].value;
+							var data_gift = new FormData();
+							data_gift.append('gift_ids', gift_id);
+							var csrftoken = getCookie("csrftoken");
+							$.ajax({
+								type: "POST",
+								url: "{% url 'dashboard:delete-gifts' %}",
+								data: data_gift, // serializes the form's elements.
+								processData: false,
+								contentType: false,
+								headers: {
+									'X-CSRFToken': csrftoken
+								},
+								beforeSend:function()
+								{
+									Swal.fire({
+										text: "Deleting " + customerName,
+										icon: "info",
+										buttonsStyling: false,
+										showConfirmButton: false
+									});
+								},
+								success: function(data, status)
+								{
+									Swal.fire({
+										text: "You have deleted " + customerName + "!.",
+										icon: "success",
+										buttonsStyling: false,
+										confirmButtonText: "Ok, got it!",
+										customClass: {
+											confirmButton: "btn fw-bold btn-primary",
+										}
+									});
+									
+									dt.draw();
+								},
+								error: function(request, status, error){
+									Swal.fire({
+										text: customerName + " was not deleted.",
+										icon: "error",
+										buttonsStyling: false,
+										confirmButtonText: "Ok, got it!",
+										customClass: {
+											confirmButton: "btn fw-bold btn-primary",
+										}
+									});
+								}
+							});
+							
+						} else if (result.dismiss === 'cancel') {
+							Swal.fire({
+								text: customerName + " was not deleted.",
+								icon: "error",
+								buttonsStyling: false,
+								confirmButtonText: "Ok, got it!",
+								customClass: {
+									confirmButton: "btn fw-bold btn-primary",
+								}
+							});
+						}
+					});
+				})
+			});
+		}
+
+
+		// Init toggle toolbar
+		var initToggleToolbar = function () {
+			// Toggle selected action toolbar
+			// Select all checkboxes
+			const container = document.querySelector('#kt_table');
+			const checkboxes = container.querySelectorAll('[type="checkbox"]');
+
+			// Select elements
+			const deleteSelected = document.querySelector('[data-kt-user-table-select="delete_selected"]');
+
+			// Toggle delete selected toolbar
+			checkboxes.forEach(c => {
+				// Checkbox on click event
+				c.addEventListener('click', function () {
+					setTimeout(function () {
+						toggleToolbars();
+					}, 50);
+				});
+			});
+
+			// Deleted selected rows
+			deleteSelected.addEventListener('click', function () {
+				const selected_checkboxes = container.querySelectorAll('input[name="gift_checkbox_id"]:checked');
+				// SweetAlert2 pop up --- official docs reference: https://sweetalert2.github.io/
+				Swal.fire({
+					text: "Are you sure you want to delete selected customers?",
+					icon: "warning",
+					showCancelButton: true,
+					buttonsStyling: false,
+					showLoaderOnConfirm: true,
+					confirmButtonText: "Yes, delete!",
+					cancelButtonText: "No, cancel",
+					customClass: {
+						confirmButton: "btn fw-bold btn-danger",
+						cancelButton: "btn fw-bold btn-active-light-primary"
+					},
+				}).then(function (result) {
+					if (result.value) {
+						var data_gift = new FormData();
+						selected_checkboxes.forEach((el) => {
+							data_gift.append('gift_ids', el.value);
+						});
+						var csrftoken = getCookie("csrftoken");
+						$.ajax({
+							type: "POST",
+							url: "{% url 'dashboard:delete-gifts' %}",
+							data: data_gift, // serializes the form's elements.
+							processData: false,
+  							contentType: false,
+							headers: {
+								'X-CSRFToken': csrftoken
+							},
+							beforeSend:function()
+							{
+								Swal.fire({
+									text: "Deleting selected customers",
+									icon: "info",
+									buttonsStyling: false,
+									showConfirmButton: false
+								})
+							},
+							success: function(data, status)
+							{
+								Swal.fire({
+									text: "You have deleted all selected customers!.",
+									icon: "success",
+									buttonsStyling: false,
+									confirmButtonText: "Ok, got it!",
+									customClass: {
+										confirmButton: "btn fw-bold btn-primary",
+									}
+								})
+								
+								dt.draw();
+							},
+							error: function(request, status, error){
+								Swal.fire({
+									text: "Selected customers was not deleted.",
+									icon: "error",
+									buttonsStyling: false,
+									confirmButtonText: "Ok, got it!",
+									customClass: {
+										confirmButton: "btn fw-bold btn-primary",
+									}
+								});
+							}
+						});
+						
+					} else if (result.dismiss === 'cancel') {
+						Swal.fire({
+							text: "Selected customers was not deleted.",
+							icon: "error",
+							buttonsStyling: false,
+							confirmButtonText: "Ok, got it!",
+							customClass: {
+								confirmButton: "btn fw-bold btn-primary",
+							}
+						});
+					}
+					selected_checkboxes.forEach((el) => {
+						el.checked = false;
+					});
+					const headerCheckbox = container.querySelectorAll('[type="checkbox"]')[0];
+					headerCheckbox.checked = false;
+					toggleToolbars();
+				});
+				
+			});
+		}
+
+		// Toggle toolbars
+		var toggleToolbars = function () {
+			// Define variables
+			const container = document.querySelector('#kt_table');
+			const toolbarBase = document.querySelector('[data-kt-user-table-toolbar="base"]');
+			const toolbarSelected = document.querySelector('[data-kt-user-table-toolbar="selected"]');
+			const selectedCount = document.querySelector('[data-kt-user-table-select="selected_count"]');
+
+			// Select refreshed checkbox DOM elements
+			const allCheckboxes = container.querySelectorAll('tbody [type="checkbox"]');
+
+			// Detect checkboxes state & count
+			let checkedState = false;
+			let count = 0;
+
+			// Count checked boxes
+			allCheckboxes.forEach(c => {
+				if (c.checked) {
+					checkedState = true;
+					count++;
+				}
+			});
+
+			// Toggle toolbars
+			if (checkedState) {
+				selectedCount.innerHTML = count;
+				toolbarBase.classList.add('d-none');
+				toolbarSelected.classList.remove('d-none');
+			} else {
+				toolbarBase.classList.remove('d-none');
+				toolbarSelected.classList.add('d-none');
+			}
+		}
+
+		// Public methods
+		return {
+			init: function () {
+				initDatatable();
+				handleSearchDatatable();
+				initToggleToolbar();
+				handleDeleteRows();
+			},
+			reload: function() {
+				dt.draw();
+			}
+		}
+	}();
+
+	// On document ready
+	KTUtil.onDOMContentLoaded(function () {
+		KTDatatablesServerSide.init();
+	});
+</script>
+{% endblock %}

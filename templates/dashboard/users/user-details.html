@@ -1,0 +1,385 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock title %}
+{% block content %}
+<link href="{% static 'admin/assets/plugins/custom/cropper/cropper.bundle.css' %}" rel="stylesheet" type="text/css" />
+	<div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+		<!--begin::Content wrapper-->
+		<div class="d-flex flex-column flex-column-fluid">
+			<!--begin::Toolbar-->
+			<div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+				<!--begin::Toolbar container-->
+				<div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack">
+					<!--begin::Page title-->
+					<div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+						<!--begin::Title-->
+						<h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">User Details</h1>
+						<!--end::Title-->
+						<!--begin::Breadcrumb-->
+						<ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+							<!--begin::Item-->
+							<li class="breadcrumb-item text-muted">
+								<a href="{% url 'dashboard:users' %}" class="text-muted text-hover-primary">Home</a>
+							</li>
+							<!--end::Item-->
+							<!--begin::Item-->
+							<li class="breadcrumb-item">
+								<span class="bullet bg-gray-400 w-5px h-2px"></span>
+							</li>
+							<!--end::Item-->
+							<!--begin::Item-->
+							<li class="breadcrumb-item text-muted">User-details</li>
+							<!--end::Item-->
+						</ul>
+						<!--end::Breadcrumb-->
+					</div>
+					<!--end::Page title-->
+				</div>
+				<!--end::Toolbar container-->
+			</div>
+			<!--end::Toolbar-->
+			<!--begin::Content-->
+			<div id="kt_app_content" class="app-content flex-column-fluid">
+				<!--begin::Content container-->
+				<div id="kt_app_content_container" class="app-container container-xxl">
+					<!--begin::Card-->
+					<div class="card">
+						<!--begin::Card body-->
+						<div class="card-body py-4">
+							<form class="form" action="{% url 'dashboard:create-user' %}" id="user-detail-form">
+								<!--begin::Step 1-->
+								{% csrf_token %}
+								<input type="text" name="user_id" class="form-control d-none" placeholder="" value="{{user.id}}"/>
+								<div class="d-flex flex-column me-n7 pe-7">
+									<div class="row mb-7">
+										<div class="col-6">
+											<div class="position-relative mb-3">
+												<label class="form-label fs-6 fw-semibold">Full Name:</label>
+												<input type="text" name="full_name" class="form-control" placeholder="Name" value="{{user.full_name}}"/>
+											</div>
+										</div>
+										<div class="col-6">
+											<div class="position-relative mb-3">
+												<label class="form-label fs-6 fw-semibold">Phone Number:</label>
+												<input type="number" name="phone" class="form-control" placeholder="61xxxxxx" value="{{user.phone}}"/>
+											</div>
+										</div>
+									</div>
+									
+									<div class="row mb-7">
+										<div class="col-6">
+											<label class="form-label fs-6 fw-semibold">Balance:</label>
+    										<input class="form-control" placeholder="Balance" name="balance" value="{{user.balance|floatformat:2}}"/>
+										</div>
+										<div class="col-6">
+											<label class="form-label fs-6 fw-semibold">Created Date:</label>
+    										<input class="form-control form-control-solid" placeholder="Created date" name="cr_date" value="{{user.date_joined}}" readonly/>											
+										</div>
+									</div>
+									<br>
+									<hr>
+									<label class="form-label fs-6 fw-semibold"><strong>Pubg Accounts:</strong></label>
+									<div class="table-responsive">
+										<table class="table table-row-dashed table-row-gray-300 gy-7">
+											<thead>
+												<tr class="fw-bold fs-6 text-gray-800">
+													<th>Id</th>
+										   			<th>Account Id</th>
+										   			<th>Account Name</th>
+													<th>Added date</th>
+										  		</tr>
+										 	</thead>
+										 	<tbody>
+											{% for acc in user.user_pubg_accounts.all%}
+										  		<tr>
+													<td>{{acc.id}}</td>
+										   			<td>
+														{{acc.account_id}}
+													</td>
+										   			<td>{{acc.account_name}}</td>
+													<td>{{acc.created_at}}</td>
+										  		</tr>
+											{% endfor %}
+										 	</tbody>
+										</table>
+									</div>
+									<hr>
+									<label class="form-label fs-6 fw-semibold"><strong>Transactions:</strong></label>
+									<div class="table-responsive">
+										<table class="table table-row-dashed table-row-gray-300 gy-7">
+											<thead>
+												<tr class="fw-bold fs-6 text-gray-800">
+													<th>Id</th>
+										   			<th>Transaction Type</th>
+										   			<th>Value</th>
+													<th>Date/Time</th>
+										  		</tr>
+										 	</thead>
+										 	<tbody>
+											{% for tran in user.transactions.all%}
+										  		<tr>
+													<td>{{tran.id}}</td>
+										   			<td>
+														{% if tran.status == 1 %}
+														<span class="badge badge-success">Balansy dolduryldy</span>
+															{% elif tran.status == 2%}
+																<span class="badge badge-primary">UC Satyn alyndy</span>
+															{% elif tran.status == 3 %}
+																<span class="badge badge-warning">Gift satyn alyndy</span>
+															{% else %}
+																<span class="badge badge-danger">Toleg yzyna gechirildi</span>
+														{% endif %}
+													</td>
+										   			<td>{{tran.value}}</td>
+													<td>{{tran.created_at}}</td>
+										  		</tr>
+											{% endfor %}
+										 	</tbody>
+										</table>
+									</div>
+									<hr>
+									<label class="form-label fs-6 fw-semibold"><strong>User gift orders:</strong></label>
+									<div class="table-responsive">
+										<table class="table table-row-bordered gy-5">
+											<thead>
+												<tr class="fw-semibold fs-6 text-gray-800">
+													<th scope="col">id</th>
+													<th scope="col">Order №</th>
+													<th scope="col">Discount</th>
+													<th scope="col">Discount TMT</th>
+													<th scope="col">Total</th>
+													<th scope="col">Total payed</th>
+													<th scope="col">Coupon</th>
+													<th scope="col">Status</th>
+													<th scope="col">Order date</th>
+
+												</tr>
+											</thead>
+											<tbody>
+												{% for order in user.user_gift_orders.all%}
+												<tr>
+													<th scope="row">{{order.id}}</th>
+													<td>{{order.order_no}}</td>
+													<td>{{order.discount}}</td>
+													<td>{{order.discount_tmt}}</td>
+													<td>{{order.total|floatformat:2}}</td>
+													<td>{{order.total_payed|floatformat:2}}</td>
+													<td>{{order.coupon_code}}</td>
+													<td>{{order.status}}</td>
+													<td>{{order.created_at}}</td>
+												</tr>
+												<tr>
+													<td colspan="10">
+														<table class="table table-row-dashed table-row-gray-500 gy-5 gs-5 mb-0">
+															<thead>
+																<tr class="fw-semibold fs-6 text-gray-800">
+																	<th scope="col">#</th>
+																	<th scope="col">Name</th>
+																	<th scope="col">Price</th>
+																	<th scope="col">Old Price</th>
+																	<th scope="col">Quantity</th>
+																</tr>
+															</thead>
+															<tbody>
+																{% for item in order.order_items.all %}
+																<tr>
+																	<th scope="row">{{item.id}}</th>
+																	<td>{{item.name}}</td>
+																	<td>{{item.price|floatformat:2}}</td>
+																	<td>{{item.old_price|floatformat:2}}</td>
+																	<td>{{item.quantity}}</td>
+																</tr>
+																{% endfor %}
+															</tbody>
+														</table>
+													</td>
+												</tr>
+												{% endfor %}
+											</tbody>
+										</table>
+									</div>
+									<hr>
+									<label class="form-label fs-6 fw-semibold"><strong>User UC orders:</strong></label>
+									<div class="table-responsive">
+										<table class="table table-row-bordered gy-5">
+											<thead>
+												<tr class="fw-semibold fs-6 text-gray-800">
+													<th scope="col">id</th>
+													<th scope="col">Order №</th>
+													<th scope="col">Discount</th>
+													<th scope="col">Discount TMT</th>
+													<th scope="col">Total</th>
+													<th scope="col">Total payed</th>
+													<th scope="col">Coupon</th>
+													<th scope="col">Status</th>
+													<th scope="col">Order date</th>
+
+												</tr>
+											</thead>
+											<tbody>
+												{% for order in user.user_product_orders.all%}
+												<tr>
+													<th scope="row">{{order.id}}</th>
+													<td>{{order.order_no}}</td>
+													<td>{{order.discount}}</td>
+													<td>{{order.discount_tmt}}</td>
+													<td>{{order.total|floatformat:2}}</td>
+													<td>{{order.total_payed|floatformat:2}}</td>
+													<td>{{order.coupon_code}}</td>
+													<td>{{order.status}}</td>
+													<td>{{order.created_at}}</td>
+												</tr>
+												<tr>
+													<td colspan="10">
+														<table class="table table-row-dashed table-row-gray-500 gy-5 gs-5 mb-0">
+															<thead>
+																<tr class="fw-semibold fs-6 text-gray-800">
+																	<th scope="col">#</th>
+																	<th scope="col">Name</th>
+																	<th scope="col">Price</th>
+																	<th scope="col">Old Price</th>
+																	<th scope="col">Quantity</th>
+																</tr>
+															</thead>
+															<tbody>
+																{% for item in order.order_items.all %}
+																<tr>
+																	<th scope="row">{{item.id}}</th>
+																	<td>{{item.name}}</td>
+																	<td>{{item.price|floatformat:2}}</td>
+																	<td>{{item.old_price|floatformat:2}}</td>
+																	<td>{{item.quantity}}</td>
+																</tr>
+																{% endfor %}
+															</tbody>
+														</table>
+													</td>
+												</tr>
+												{% endfor %}
+											</tbody>
+										</table>
+									</div>
+									<hr>
+								</div>
+								<div class="d-flex justify-content-between pt-15">
+									<a href="{% url 'dashboard:users' %}" class="btn btn-info" >
+										<span class="indicator-label">Back</span>
+									</a>
+									<button type="submit" class="btn btn-primary" >
+										<span class="indicator-label">Save</span>
+										<span class="indicator-progress">Please wait...
+										<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+									</button>
+									<button type="reset" class="btn btn-secondary d-none" id="reset-form">Cancel</button>
+								</div>
+								
+								<!--begin::Repeater-->
+								
+								<!--end::Repeater-->
+							</form>
+
+							
+						</div>
+						<!--end::Card body-->
+					</div>
+					<!--end::Card-->
+				</div>
+				<!--end::Content container-->
+			</div>
+			<!--end::Content-->
+		</div>
+		<!--end::Content wrapper-->
+		<!--begin::Footer-->
+		<div id="kt_app_footer" class="app-footer">
+			<!--begin::Footer container-->
+			<div class="app-container container-fluid d-flex flex-column flex-md-row flex-center flex-md-stack py-3">
+				<!--begin::Copyright-->
+				<div class="text-dark order-2 order-md-1">
+					<span class="text-muted fw-semibold me-1">2023©</span>
+					<a href="https://azico.team" target="_blank" class="text-gray-800 text-hover-primary">AZICO TEAM</a>
+				</div>
+				<!--end::Copyright-->
+			</div>
+			<!--end::Footer container-->
+		</div>
+		<!--end::Footer-->
+	</div>
+	<!--CKEditor Build Bundles:: Only include the relevant bundles accordingly-->
+	
+{% endblock content %}
+
+
+{% block script %}
+<script src="{% static 'admin/assets/plugins/custom/cropper/cropper.bundle.js' %}"></script>
+	<script>
+		var optionFormat = function(item) {		
+			var span = document.createElement('span');
+			var template = item.text;
+		
+			span.innerHTML = template;
+		
+			return $(span);
+		}
+
+		function post_data(actionUrl, formData){
+			$.ajax({
+				type: "POST",
+				url: actionUrl,
+				csrfmiddlewaretoken: '{{ csrf_token }}',
+				data: formData, // serializes the form's elements.
+				beforeSend: function(){
+					Swal.fire({
+						text: "Creating user",
+						icon: "info",
+						buttonsStyling: false,
+						showConfirmButton: false,
+						allowOutsideClick: false
+					});
+				},
+				success: function(data, status)
+				{
+					Swal.fire({
+						text: "User successfully created",
+						icon: "success",
+						buttonsStyling: false,
+						confirmButtonText: "Ok, got it!",
+						customClass: {
+							confirmButton: "btn fw-bold btn-primary",
+						}
+					}).then(function (){
+						window.location.replace("{% url 'dashboard:users' %}");
+					});
+					
+				},
+				error: function(request, status, error){
+					Swal.fire({
+						text: "Something went wrong!",
+						icon: "error",
+						buttonsStyling: false,
+						confirmButtonText: "Ok, got it!",
+						customClass: {
+							confirmButton: "btn fw-bold btn-primary",
+						}
+					});
+				},
+				cache: false,
+				contentType: false,
+				processData: false
+			});
+		}
+		
+		document.addEventListener("DOMContentLoaded", function(event) {
+
+			$("#user-detail-form").submit(function(e) {
+				e.preventDefault(); // avoid to execute the actual submit of the form.
+				
+				var form = $(this);
+				var actionUrl = form.attr('action');
+				var formData = new FormData(form[0]);
+				post_data(actionUrl, formData);
+				
+			});
+			
+		});		
+	</script>
+{% endblock %}
